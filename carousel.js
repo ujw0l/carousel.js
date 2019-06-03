@@ -1,3 +1,16 @@
+/*
+ * 
+ * 
+ * 
+ * CTC Carousel JS
+ *  Images  carousel library written in vanilla js
+ * https://ujwolbastakoti.wordpress.com/
+ * MIT license
+ * 
+ * 
+ * 
+ */
+
 class ctcCarousel {
 
 
