@@ -1,0 +1,22 @@
+{
+  "name": "ctc-carousel-js",
+  "version": "1.0.1",
+  "description": "Javascript library to create image carousel",
+  "main": "carousel.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ujw0l/carousel.js.git"
+  },
+  "keywords": [
+    "image-carousel"
+  ],
+  "author": "ujw0l",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ujw0l/carousel.js/issues"
+  },
+  "homepage": "https://ujw0l.github.io/carousel/"
+}
