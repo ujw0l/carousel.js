@@ -14,7 +14,7 @@
 class ctcCarousel {
 
 
-    constructor(elSelector, otherParam) {
+    constructor(elSelector, autoPlaySettings, otherSettings) {
 
         window.onload = () => {
 
@@ -24,7 +24,7 @@ class ctcCarousel {
 
                 let currentOpacity = el.style.opacity;
                 el.style.opacity = '0';
-                this.createCarouselDiv(el, i, otherParam);
+                this.createCarouselDiv(el, i, autoPlaySettings, otherSettings);
 
                 if (null === currentOpacity || '0' === currentOpacity) {
                     el.style.opacity = '';
@@ -38,7 +38,7 @@ class ctcCarousel {
     }
 
     //Create carousel div
-    createCarouselDiv(el, carouselNum, otherParam) {
+    createCarouselDiv(el, carouselNum, autoPlaySettings, otherSettings) {
 
         let divImgs = '';
         let elWidth = el.offsetWidth;
@@ -105,8 +105,6 @@ class ctcCarousel {
                 carouseLImgDiv.appendChild(rightNav);
                 carouselDiv.appendChild(carouseLImgDiv);
 
-
-
                 let leftNavSpan = leftNav.getElementsByTagName('span')[0];
                 leftNavSpan.style = `width:${navButtonWidth}px;box-shadow: -1px 1px 5px rgba(255,255,255,0.7);cursor:pointer;color:rgba(0,0,0,0.8);text-shadow: -2px 2px 5px rgba(0,0,0,1); background :rgba(255, 255 , 255, 0.3) url("${carouselImgs[0].src}") no-repeat top; background-size:contain;`;
                 leftNavSpan.setAttribute('onclick', 'ctcCarousel.setCarouselMainImg(' + (carouselImgs.length - 1) + ',' + (carouselImgs.length - 1) + ',' + carouselNum + ');');
@@ -121,20 +119,20 @@ class ctcCarousel {
                 rightNavSpan.setAttribute('onmouseleave', "this.style.textShadow = '-2px 2px 5px rgba(0,0,0,1)';");
             }
 
-
         });
 
-        el.appendChild(carouselDiv);
 
-        if (undefined != otherParam) {
-            if (otherParam.autoPlay) {
-                if (undefined != otherParam.autoPlayInverval) {
-                    var interval = otherParam.autoPlayInverval;
+
+        if (undefined != autoPlaySettings) {
+
+            if (autoPlaySettings.autoPlay) {
+                if (undefined != autoPlaySettings.autoPlayInverval) {
+                    var interval = autoPlaySettings.autoPlayInverval;
                 } else {
                     var interval = 2000;
                 }
-                if (undefined != otherParam.autoPlaySelector) {
-                    let selectedEl = document.querySelectorAll(otherParam.autoPlaySelector);
+                if (undefined != autoPlaySettings.autoPlaySelector) {
+                    let selectedEl = document.querySelectorAll(autoPlaySettings.autoPlaySelector);
                     selectedEl.forEach((autoPlayEl) => {
 
                         if (autoPlayEl === el) {
@@ -154,9 +152,9 @@ class ctcCarousel {
         }
 
 
+        el.appendChild(carouselDiv);
 
     }
-
 
 
     static setCarouselMainImg(imgNum, imgCount, carouselNum) {
@@ -209,13 +207,11 @@ class ctcCarousel {
 
         carouseLImgDiv.style.backgroundImage = ` url("${newCarouselImg.src}")`;
 
+
         if (null !== newCarouselImg.getAttribute('title')) {
             carouseLImgDiv.title = newCarouselImg.getAttribute('title');
         }
 
     }
-
-
-
 
 }
