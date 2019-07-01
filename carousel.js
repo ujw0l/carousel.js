@@ -71,7 +71,7 @@ class ctcCarousel {
         let leftNav = document.createElement('div');
         leftNav.id = 'ctcCarouselLeftNav-' + carouselNum;
 
-        leftNav.style = `height:${navButtonHeight}px;opacity:0;text-align:bottom;margin-top:${(elHeight -navButtonHeight)/2}px;float:left;color:rgba(0,0,0,0.7);display:flex;font-size:${fontSize}px;width${navButtonWidth}px;background-color:rgba(255, 255 , 255, 1);`;
+        leftNav.style = `height:${navButtonHeight}px;opacity:0;text-align:bottom;margin-top:${(elHeight - navButtonHeight) / 2}px;float:left;color:rgba(0,0,0,0.7);display:flex;font-size:${fontSize}px;width${navButtonWidth}px;background-color:rgba(255, 255 , 255, 1);`;
         leftNav.innerHTML = '<span title="Previous" id= "leftNav-' + carouselNum + '" >&#8249;</span>';
 
         let rightNav = document.createElement('div');
@@ -106,14 +106,16 @@ class ctcCarousel {
                 carouselDiv.appendChild(carouseLImgDiv);
 
                 let leftNavSpan = leftNav.getElementsByTagName('span')[0];
-                leftNavSpan.style = `width:${navButtonWidth}px;box-shadow: -1px 1px 5px rgba(255,255,255,0.7);cursor:pointer;color:rgba(0,0,0,0.8);text-shadow: -2px 2px 5px rgba(0,0,0,1); background :rgba(255, 255 , 255, 0.3) url("${carouselImgs[0].src}") no-repeat top; background-size:contain;`;
+                let prevImgSrc = undefined != carouselImgs[carouselImgs.length - 1] ? carouselImgs[carouselImgs.length - 1].src : carouselImgs[0].src;
+                leftNavSpan.style = `width:${navButtonWidth}px;box-shadow: -1px 1px 5px rgba(255,255,255,0.7);cursor:pointer;color:rgba(0,0,0,0.8);text-shadow: -2px 2px 5px rgba(0,0,0,1); background :rgba(255, 255 , 255, 0.3) url("${prevImgSrc}") no-repeat top; background-size:contain;`;
                 leftNavSpan.setAttribute('onclick', 'ctcCarousel.setCarouselMainImg(' + (carouselImgs.length - 1) + ',' + (carouselImgs.length - 1) + ',' + carouselNum + ');');
                 leftNavSpan.setAttribute('onmouseenter', "this.style.textShadow ='-4px 4px 10px rgba(0,0,0,0.9)';");
                 leftNavSpan.setAttribute('onmouseleave', "this.style.textShadow = '-2px 2px 5px rgba(0,0,0,1)';");
 
 
                 let rightNavSpan = rightNav.getElementsByTagName('span')[0];
-                rightNavSpan.style = `width:${navButtonWidth}px;box-shadow: -1px 1px 5px rgba(255,255,255,0.7);cursor:pointer;color:rgba(0,0,0,0.8);text-shadow: -2px 2px 5px rgba(0,0,0,1);background :rgba(255, 255 , 255, 0.3) url("${carouselImgs[carouselImgs.length - 1].src}") no-repeat top; background-size:contain;`;
+                let nextImgSrc = undefined != carouselImgs[1] ? carouselImgs[1].src : carouselImgs[0].src;
+                rightNavSpan.style = `width:${navButtonWidth}px;box-shadow: -1px 1px 5px rgba(255,255,255,0.7);cursor:pointer;color:rgba(0,0,0,0.8);text-shadow: -2px 2px 5px rgba(0,0,0,1);background :rgba(255, 255 , 255, 0.3) url("${nextImgSrc}") no-repeat top; background-size:contain;`;
                 rightNavSpan.setAttribute('onclick', 'ctcCarousel.setCarouselMainImg(1,' + (carouselImgs.length - 1) + ',' + carouselNum + ');');
                 rightNavSpan.setAttribute('onmouseenter', 'this.style.textShadow="-4px 4px 10px rgba(0,0,0,0.9)";');
                 rightNavSpan.setAttribute('onmouseleave', "this.style.textShadow = '-2px 2px 5px rgba(0,0,0,1)';");
@@ -213,5 +215,8 @@ class ctcCarousel {
         }
 
     }
+
+
+
 
 }
