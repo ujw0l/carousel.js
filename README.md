@@ -46,7 +46,9 @@ autoPlay : boolean, (Optional, set true to activate slide autoplay)
 autoPlayInterval : number, (Optional,number for slide autoplay interval in micro seconds default 1000) )
 autoPlaySelector : 'selectors', (one or more element to set on autoplay (default all carousels will autoplay)
 
-Note : Initialize carousel like above inside script tag on window onload or footer (Selector should be warapper element containing images)
+
+Note 1 : Initialize carousel inside script tag on window onload or footer. (Selector should be wrapper element containing images)
+Note 2 : Do not forget to set height and width of wrapper element.
 
 ```
 
@@ -67,6 +69,14 @@ Contributions, issues and feature requests are welcome. Feel free to check [issu
 ## Show your support
 
 Please ⭐️ this repository if you like it.
+
+<ul>
+<li>
+<a href="https://www.patreon.com/ujw0l">
+  <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
+</a>
+</li>
+</ul>
 
 ## License
 
