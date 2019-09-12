@@ -36,13 +36,18 @@ carousel.js
 ## Options
 
 ```sh
-var carousel = new ctcCarousel('#selector,.selector', { autoPlay: true, autoPlayInterval: number, autoPlaySelector: '#selector' });
-First Parameter  : one or multple selector to apply carousel.
-Second Parameter : 
-autoPlay : boolean if to activate slide autoplay
-autoPlayInterval: number, //number to for slide interval in autoplay default 1sec (e.g use 1000 for 1 second , 2000 for 2 seconds and so on)
-autoPlaySelector: '#selector' //one or all of the selector to set on autoplay (if left empty all carousel will autoplay)
-Note:Initialize carousel like above inside script tag
+new ctcCarousel('selector1,selector2',{autoPlay: true, autoPlayInterval: number, autoPlaySelector: 'selector'});
+
+First Parameter : one or multple selector to apply carousel.
+
+Second Parameter :
+
+autoPlay : boolean, (Optional, set true to activate slide autoplay)
+autoPlayInterval : number, (Optional,number for slide autoplay interval in micro seconds default 1000) )
+autoPlaySelector : 'selectors', (one or more element to set on autoplay (default all carousels will autoplay)
+
+Note : Initialize carousel like above inside script tag on window onload or footer (Selector should be warapper element containing images)
+
 ```
 
 

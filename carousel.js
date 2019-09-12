@@ -90,11 +90,8 @@ class ctcCarousel {
         let elWidth = imgDiv.offsetWidth;
         let prevImg =  0 === imgNum ? gal.length-1 : imgNum-1;
         let nextImg  =  gal.length-1 === imgNum ? 0 : imgNum+1;
-
-
         let navButtonWidth = 0.03 * elWidth  ;
         let navButtonHeight =  0.07*elWidth;
-        let fontSize = 2.6*navButtonWidth;
 
         let prevNav = document.createElement('div');
             prevNav.id = `carousel-${carouselNum}-prev`;
@@ -144,8 +141,6 @@ class ctcCarousel {
     }
 
     adjustOnResize(selectedEl){
-
-
         selectedEl.forEach((x,i)=>{
             let elWidth = x.offsetWidth;
             let elHeight = x.offsetHeight;
