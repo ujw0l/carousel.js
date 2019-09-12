@@ -14,209 +14,158 @@
 class ctcCarousel {
 
 
-    constructor(elSelector, autoPlaySettings, otherSettings) {
+    constructor(elSelector, autoPlaySet, otherSettings) {
 
-        window.onload = () => {
+        let selectedEl = document.querySelectorAll(elSelector);
 
-            let selectedEl = document.querySelectorAll(elSelector);
-
+        selectedEl.forEach(x=>x.style.visibility = 'hidden');
+        
+        window.addEventListener('load', () => {
+           
             selectedEl.forEach((el, i) => {
-
-                let currentOpacity = el.style.opacity;
-                el.style.opacity = '0';
-                this.createCarouselDiv(el, i, autoPlaySettings, otherSettings);
-
-                if (null === currentOpacity || '0' === currentOpacity) {
-                    el.style.opacity = '';
-                } else {
-                    el.style.opacity = currentOpacity;
+        
+                if (undefined != autoPlaySet && true === autoPlaySet.autoPlay ){
+                    this.createCarouselDiv(el, i, 
+                        {
+                            interval : undefined != autoPlaySet.autoPlayInverval ? autoPlaySet.autoPlayInverval : 2000,
+                            auto : undefined != autoPlaySet.autoPlaySelector ? Array.from(document.querySelectorAll(autoPlaySet.autoPlaySelector)).includes(el) : true,
+                        }
+                        , otherSettings);
+                }else{
+                    this.createCarouselDiv(el, i, {}, otherSettings);
                 }
+               el.style.visibility = '';
             });
+        });
 
-        }
-
+        window.addEventListener('resize', ()=>this.adjustOnResize(selectedEl));
     }
 
     //Create carousel div
-    createCarouselDiv(el, carouselNum, autoPlaySettings, otherSettings) {
+    createCarouselDiv(el, carouselNum, autoPlay, otherSettings) {
 
-        let divImgs = '';
         let elWidth = el.offsetWidth;
         let elHeight = el.offsetHeight;
-        let navButtonWidth = elWidth * 0.03;
-        let navButtonHeight = elHeight * 0.22;
-        var carouselImgs = el.querySelectorAll('img');
-        let fontSize = 58;
+        let carouselImgs = Array.from(el.querySelectorAll('img'));
 
-        if (navButtonWidth > 50) {
-            navButtonWidth = 50;
-        } else if (navButtonWidth < 50 && navButtonWidth > 20) {
-            navButtonWidth = 30;
-
-        } else if (navButtonWidth < 20) {
-            navButtonWidth = 20;
-        }
-
-        if (navButtonHeight > 100) {
-            navButtonHeight = 100;
-            fontSize = 100;
-        } else if (navButtonHeight < 100 && navButtonHeight > 50) {
-            fontSize = 85;
-            navButtonHeight = 80;
-        } else if (navButtonHeight < 50) {
-            navButtonHeight = 50;
-            fontSize = 45;
-        }
-
-        let leftNav = document.createElement('div');
-        leftNav.id = 'ctcCarouselLeftNav-' + carouselNum;
-
-        leftNav.style = `height:${navButtonHeight}px;opacity:0;text-align:bottom;margin-top:${(elHeight - navButtonHeight) / 2}px;float:left;color:rgba(0,0,0,0.7);display:flex;font-size:${fontSize}px;width${navButtonWidth}px;background-color:rgba(255, 255 , 255, 1);`;
-        leftNav.innerHTML = '<span title="Previous" id= "leftNav-' + carouselNum + '" >&#8249;</span>';
-
-        let rightNav = document.createElement('div');
-        rightNav.id = 'ctcCarouselRightNav-' + carouselNum;
-        rightNav.style = `height:${navButtonHeight}px;opacity:0;text-align:center;float:right;margin-top:${(elHeight - navButtonHeight) / 2}px;color:rgba(0,0,0,0.7);display:flex; font-size:${fontSize}px;width:${navButtonWidth}px;background-color:rgba(255, 255 , 255, 1);`;
-        rightNav.innerHTML = '<span title="Next" id="rightNav-' + carouselNum + '" >&#8250;</span>';
-
+        carouselImgs.map(x=>x.style.display='none');
+     
         let carouselDiv = document.createElement('div');
-        carouselDiv.id = "ctcCarouselDiv-" + carouselNum;
-        carouselDiv.classList = 'ctcCarouselDiv';
-        carouselDiv.style = `width:${elWidth}px;height:${elHeight}px;margin-left:auto;margin-right:auto;display:block`;
+            carouselDiv.id = "ctc-carousel-" + carouselNum;
+            carouselDiv.classList = 'ctcCarouselDiv';
+            carouselDiv.style = `width:${elWidth}px;height:${elHeight}px;margin-left:auto;margin-right:auto;display:block`;
 
-        carouselImgs.forEach((img, i) => {
+        let imgDiv = document.createElement('div');
+            imgDiv.addEventListener('mouseenter',   event=> event.target.querySelectorAll("div").forEach(nav => nav.style.opacity ="1") );
+            imgDiv.addEventListener('mouseleave',   event=> event.target.querySelectorAll("div").forEach(nav => nav.style.opacity ="0") );
+            imgDiv.id = 'ctc-carousel-img-div-' + carouselNum;
+            imgDiv.style = `box-shadow: 1px 1px 15px rgba(0,0,0,0.7);transition: 0.3s ease;background :rgba(0, 0 , 0, 0.8) url("") no-repeat center; background-size:contain;height:${elHeight}px;width:${elWidth}px;margin-left:-1px;color:rgba(255,255,255,1);text-align:center;`;
 
-            img.style.display = 'none';
-            img.setAttribute('data-carousel-' + carouselNum + '-img', i);
+        
+        carouselDiv.appendChild(imgDiv);
+        el.appendChild(carouselDiv);
+        this.loadImage(0,imgDiv,carouselImgs,carouselNum);
 
-            if (i === 0) {
+        if(0 !== autoPlay.length && true === autoPlay.auto){
+            setInterval(() => imgDiv.querySelector('#next-img-'+carouselNum).click(), autoPlay.interval);
+        } 
+        
+    }
 
-                let carouseLImgDiv = document.createElement('div');
-                carouseLImgDiv.id = 'ctcCarouseLImgDiv-' + carouselNum;
-                carouseLImgDiv.style = `box-shadow: 1px 1px 15px rgba(0,0,0,0.7);transition: width 0.5s;background :rgba(0, 0 , 0, 0.8) url("${img.src}") no-repeat center; background-size:contain;height:${elHeight}px;width:${elWidth}px;`;
-                carouseLImgDiv.setAttribute('onmouseenter', 'this.querySelectorAll("div").forEach(nav => nav.style.opacity ="1" )');
-                carouseLImgDiv.setAttribute('onmouseleave', 'this.querySelectorAll("div").forEach(nav => nav.style.opacity ="0" )');
+    loadImage( imgNum,imgDiv,imgGal,carouselNum){
 
-                if (null !== img.getAttribute('title')) {
-                    carouseLImgDiv.title = img.getAttribute('title');
-                }
+        let loadedImg =  new Image();
+        loadedImg.src = imgGal[imgNum].src;
+    
+        loadedImg.addEventListener('load',event=>{
+                                                    imgDiv.style.backgroundImage = `url('${event.target.src}')`;    
+                                                    imgDiv.title = null !== imgGal[imgNum].getAttribute('title') ? imgGal[imgNum].getAttribute('title') :'';
+                                                });                                                             
+         this.navButton(imgNum,imgDiv,imgGal,carouselNum);                                       
+    }
 
-                carouseLImgDiv.appendChild(leftNav);
-                carouseLImgDiv.appendChild(rightNav);
-                carouselDiv.appendChild(carouseLImgDiv);
+    navButton(imgNum,imgDiv,gal,carouselNum){
 
-                let leftNavSpan = leftNav.getElementsByTagName('span')[0];
-                let prevImgSrc = undefined != carouselImgs[carouselImgs.length - 1] ? carouselImgs[carouselImgs.length - 1].src : carouselImgs[0].src;
-                leftNavSpan.style = `width:${navButtonWidth}px;box-shadow: -1px 1px 5px rgba(255,255,255,0.7);cursor:pointer;color:rgba(0,0,0,0.8);text-shadow: -2px 2px 5px rgba(0,0,0,1); background :rgba(255, 255 , 255, 0.3) url("${prevImgSrc}") no-repeat top; background-size:contain;`;
-                leftNavSpan.setAttribute('onclick', 'ctcCarousel.setCarouselMainImg(' + (carouselImgs.length - 1) + ',' + (carouselImgs.length - 1) + ',' + carouselNum + ');');
-                leftNavSpan.setAttribute('onmouseenter', "this.style.textShadow ='-4px 4px 10px rgba(0,0,0,0.9)';");
-                leftNavSpan.setAttribute('onmouseleave', "this.style.textShadow = '-2px 2px 5px rgba(0,0,0,1)';");
+        let elHeight = imgDiv.offsetHeight;
+        let elWidth = imgDiv.offsetWidth;
+        let prevImg =  0 === imgNum ? gal.length-1 : imgNum-1;
+        let nextImg  =  gal.length-1 === imgNum ? 0 : imgNum+1;
 
 
-                let rightNavSpan = rightNav.getElementsByTagName('span')[0];
-                let nextImgSrc = undefined != carouselImgs[1] ? carouselImgs[1].src : carouselImgs[0].src;
-                rightNavSpan.style = `width:${navButtonWidth}px;box-shadow: -1px 1px 5px rgba(255,255,255,0.7);cursor:pointer;color:rgba(0,0,0,0.8);text-shadow: -2px 2px 5px rgba(0,0,0,1);background :rgba(255, 255 , 255, 0.3) url("${nextImgSrc}") no-repeat top; background-size:contain;`;
-                rightNavSpan.setAttribute('onclick', 'ctcCarousel.setCarouselMainImg(1,' + (carouselImgs.length - 1) + ',' + carouselNum + ');');
-                rightNavSpan.setAttribute('onmouseenter', 'this.style.textShadow="-4px 4px 10px rgba(0,0,0,0.9)";');
-                rightNavSpan.setAttribute('onmouseleave', "this.style.textShadow = '-2px 2px 5px rgba(0,0,0,1)';");
-            }
+        let navButtonWidth = 0.03 * elWidth  ;
+        let navButtonHeight =  0.07*elWidth;
+        let fontSize = 2.6*navButtonWidth;
+
+        let prevNav = document.createElement('div');
+            prevNav.id = `carousel-${carouselNum}-prev`;
+            prevNav.style = `height:${navButtonHeight}px;margin-top:${(elHeight -navButtonHeight)/2}px;float:left;color:rgba(0,0,0,0.7);display:flex;font-size:${0.08 * elWidth}px;width:${navButtonWidth}px;background-color:rgba(255, 255 , 255, 1);`;
+         let prevSpan =  document.createElement('span');
+             prevSpan.id = `prev-img-${carouselNum}`;
+             prevSpan.style = `box-shadow: 1px 1px 15px rgba(0,0,0,0.7);width:${navButtonWidth}px;box-shadow: -1px 1px 5px rgba(255,255,255,0.7);cursor:pointer;color:rgba(0,0,0,0.8);text-shadow: -2px 2px 5px rgba(0,0,0,1); background :rgba(255, 255 , 255, 0.3) url("") no-repeat top; background-size:contain;`;
+             prevSpan.title = 'Previous Image';      
+             prevSpan.innerHTML = `&#8249;`;
+             prevSpan.addEventListener('mouseenter',event=> event.target.style.textShadow ='-4px 4px 10px rgba(0,0,0,0.9 )') ;
+             prevSpan.addEventListener('mouseleave',event=> event.target.style.textShadow ='-2px 2px 5px rgba(0,0,0,1)') ;
+                let prevLoadImg = new Image();
+                    prevLoadImg.src = gal[prevImg].src;
+                    prevLoadImg.addEventListener('load',()=> prevSpan.style.backgroundImage = `url('${event.target.src}')`);  
+             prevNav.appendChild(prevSpan);
+
+
+        let  nextNav = document.createElement('div');
+             nextNav.id = `carousel-${carouselNum}-next`;
+             nextNav.style = `text-align:center;margin-right:1px;height:${navButtonHeight}px;float:right;margin-top:${(elHeight - navButtonHeight) / 2}px;margin-right:0px;color:rgba(0,0,0,0.7);display:flex; font-size:${0.08 * elWidth}px;width:${navButtonWidth}px;background-color:rgba(255, 255 , 255, 1);`;
+        let nextSpan =  document.createElement('span');
+            nextSpan.id = `next-img-${carouselNum}`;
+            nextSpan.style = `width:${navButtonWidth}px;box-shadow: -1px 1px 5px rgba(255,255,255,0.7);cursor:pointer;color:rgba(0,0,0,0.8);text-shadow: -2px 2px 5px rgba(0,0,0,1);background :rgba(255, 255 , 255, 0.3) url("") no-repeat top; background-size:contain;`;
+            nextSpan.title = 'Next Image';      
+            nextSpan.innerHTML = `&#8250;`;
+            nextSpan.addEventListener('mouseenter',event=> event.target.style.textShadow ='-4px 4px 10px rgba(0,0,0,0.9 )') ;
+            nextSpan.addEventListener('mouseleave',event=> event.target.style.textShadow ='-2px 2px 5px rgba(0,0,0,1)') ;
+                let nextLoadImg = new Image();
+                    nextLoadImg.src = gal[nextImg].src;
+                    nextLoadImg.addEventListener('load',()=>nextSpan.style.backgroundImage = `url('${event.target.src}')`);    
+            nextNav.appendChild(nextSpan);
+
+            prevNav.addEventListener('click',event=>{
+                imgDiv.removeChild(prevNav);
+                imgDiv.removeChild(nextNav);
+                this.loadImage( prevImg,imgDiv,gal,carouselNum)
+            });
+
+            nextNav.addEventListener('click',event=>{
+                imgDiv.removeChild(nextNav);
+                imgDiv.removeChild(prevNav);
+                this.loadImage( nextImg,imgDiv,gal,carouselNum)
+            });
+
+       imgDiv.appendChild( prevNav);
+       imgDiv.appendChild( nextNav);
+    }
+
+    adjustOnResize(selectedEl){
+
+
+        selectedEl.forEach((x,i)=>{
+            let elWidth = x.offsetWidth;
+            let elHeight = x.offsetHeight;
+            let carouselDiv = x.querySelector('#ctc-carousel-'+i);
+            let imgDiv  =  carouselDiv.querySelector('#ctc-carousel-img-div-'+i);
+            let prevNav =  imgDiv.querySelector(`#carousel-${i}-prev`);
+            let nextNav =  imgDiv.querySelector(`#carousel-${i}-next`);
+            let prevSpan = prevNav.querySelector(`#prev-img-${i}`);
+            let nextSpan = nextNav.querySelector(`#next-img-${i}`);
+            let navButtonWidth = 0.03 * elWidth;
+            let navButtonHeight =  0.07*elWidth;
+
+            imgDiv.style.width = carouselDiv.style.width = `${elWidth}px`;
+            imgDiv.style.height = carouselDiv.style.height = `${elHeight}px`;
+            nextNav.style.width =  prevNav.style.width = prevSpan.style.width = nextSpan.style.width = `${navButtonWidth}px`;
+            nextNav.style.height =  prevNav.style.height = `${navButtonHeight}px`;
+            nextNav.style.marginTop =  prevNav.style.marginTop = `${(elHeight - navButtonHeight)/2}px`;
+            nextNav.style.fontSize =  prevNav.style.fontSize = `${0.08*elWidth }px`;
 
         });
 
-
-
-        if (undefined != autoPlaySettings) {
-
-            if (autoPlaySettings.autoPlay) {
-                if (undefined != autoPlaySettings.autoPlayInverval) {
-                    var interval = autoPlaySettings.autoPlayInverval;
-                } else {
-                    var interval = 2000;
-                }
-                if (undefined != autoPlaySettings.autoPlaySelector) {
-                    let selectedEl = document.querySelectorAll(autoPlaySettings.autoPlaySelector);
-                    selectedEl.forEach((autoPlayEl) => {
-
-                        if (autoPlayEl === el) {
-                            setInterval(() => {
-                                document.getElementById('rightNav-' + carouselNum).click();
-                            }, interval);
-                        }
-                    });
-                } else {
-                    setInterval(() => {
-                        document.getElementById('rightNav-' + carouselNum).click();
-                    }, interval);
-                }
-
-            }
-
-        }
-
-
-        el.appendChild(carouselDiv);
-
     }
-
-
-    static setCarouselMainImg(imgNum, imgCount, carouselNum) {
-
-        let carouseLImgDiv = document.getElementById('ctcCarouseLImgDiv-' + carouselNum);
-        let leftNavSpan = document.getElementById('leftNav-' + carouselNum);
-        let rightNavSpan = document.getElementById('rightNav-' + carouselNum);
-
-        if (imgNum === 0) {
-
-            var newCarouselImg = document.querySelector('img[data-carousel-' + carouselNum + '-img = "0"]');
-            let prevImgSrc = document.querySelector('img[data-carousel-' + carouselNum + '-img = "' + imgCount + '"]').src;
-            let nextImgSrc = document.querySelector('img[data-carousel-' + carouselNum + '-img = "1"]').src
-
-            rightNavSpan.setAttribute('onclick', 'ctcCarousel.setCarouselMainImg(1,' + imgCount + ',' + carouselNum + ');');
-            rightNavSpan.style.backgroundImage = ` url("${nextImgSrc}")`;
-
-            leftNavSpan.setAttribute('onclick', 'ctcCarousel.setCarouselMainImg(' + imgCount + ',' + imgCount + ',' + carouselNum + ');');
-            leftNavSpan.style.backgroundImage = ` url("${prevImgSrc}")`;
-
-        } else if (imgNum > imgCount) {
-            var newCarouselImg = document.querySelector('img[data-carousel-' + carouselNum + '-img = "0"]');
-            let prevImgSrc = document.querySelector('img[data-carousel-' + carouselNum + '-img = "' + (imgCount - 1) + '"]').src;
-            let nextImgSrc = document.querySelector('img[data-carousel-' + carouselNum + '-img = "1"]').src;
-
-            rightNavSpan.setAttribute('onclick', 'ctcCarousel.setCarouselMainImg(1,' + imgCount + ',' + carouselNum + ');');
-            rightNavSpan.style.backgroundImage = ` url("${nextImgSrc}")`;
-
-            leftNavSpan.setAttribute('onclick', 'ctcCarousel.setCarouselMainImg(' + (imgCount - 1) + ',' + imgCount + ',' + carouselNum + ');');
-            leftNavSpan.style.backgroundImage = ` url(${prevImgSrc})`;
-
-        } else {
-            var newCarouselImg = document.querySelector('img[data-carousel-' + carouselNum + '-img = "' + imgNum + '"]');
-            let prevImgSrc = document.querySelector('img[data-carousel-' + carouselNum + '-img = "' + (imgNum - 1) + '"]').src;
-
-
-            rightNavSpan.setAttribute('onclick', 'ctcCarousel.setCarouselMainImg(' + (imgNum + 1) + ',' + imgCount + ',' + carouselNum + ');');
-            if (imgNum === imgCount) {
-                let nextImgSrc = document.querySelector('img[data-carousel-' + carouselNum + '-img = "0"]').src;
-                rightNavSpan.style.backgroundImage = `url("${nextImgSrc}")`;
-            } else {
-                let nextImgSrc = document.querySelector('img[data-carousel-' + carouselNum + '-img = "' + (imgNum + 1) + '"]').src;
-                rightNavSpan.style.backgroundImage = `url("${nextImgSrc}")`;
-            }
-
-            leftNavSpan.setAttribute('onclick', 'ctcCarousel.setCarouselMainImg(' + (imgNum - 1) + ',' + imgCount + ',' + carouselNum + ');');
-            leftNavSpan.style.backgroundImage = ` url("${prevImgSrc}")`;
-
-        }
-
-        carouseLImgDiv.style.backgroundImage = ` url("${newCarouselImg.src}")`;
-
-
-        if (null !== newCarouselImg.getAttribute('title')) {
-            carouseLImgDiv.title = newCarouselImg.getAttribute('title');
-        }
-
-    }
-
-
-
-
 }
