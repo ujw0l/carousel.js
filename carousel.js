@@ -120,7 +120,7 @@ class ctcCarousel {
                                                     if(undefined != loadingSpan){
                                                         imgDiv.removeChild(loadingSpan);
                                                     }
-                                                    imgDiv.style.backgroundImage = `url('${event.target.src}')`;    
+                                                    imgDiv.style.backgroundImage = `url('${imgGal[imgNum].src}')`;    
                                                     imgDiv.title = null !== imgGal[imgNum].getAttribute('title') ? imgGal[imgNum].getAttribute('title') :'';
                                                 });  
                                                                                                                                                               
@@ -159,14 +159,13 @@ class ctcCarousel {
                 prevSpan.innerHTML =   '' == prevSpan.innerHTML ? '&#8249;' : '';
              },500);
 
-                let prevLoadImg = new Image();
-                    prevLoadImg.src = gal[prevImg].src;
-                    
-                    prevLoadImg.addEventListener('load',()=> {
+            let prevLoadImg = new Image();
+                prevLoadImg.src = gal[prevImg].src;
+                prevLoadImg.addEventListener('load',()=> {
                                                                 prevSpan.style.backgroundImage = `url('${event.target.src}')`;
                                                                 clearInterval(prevLoadInt);
+                                                                prevSpan.innerHTML = '&#8249;';
                                                                 prevSpan.title = null != gal[prevImg].getAttribute('title') ? gal[prevImg].getAttribute('title') :'Previous Image'; 
-                                                                prevSpan = '&#8249;';
                                                             });     
              prevNav.appendChild(prevSpan);
 
@@ -190,10 +189,11 @@ class ctcCarousel {
         let nextLoadImg = new Image();
                     nextLoadImg.src = gal[nextImg].src;
         nextLoadImg.addEventListener('load',()=>{
-                    nextSpan.style.backgroundImage = `url('${event.target.src}')` 
+                    nextSpan.style.backgroundImage = `url('${event.target.src}')` ;
                     clearInterval(nextLoadInt);
+                    nextSpan.innerHTML = '&#8250;'; 
                     nextSpan.title = null != gal[nextImg].getAttribute('title') ? gal[nextImg].getAttribute('title') :'Next Image'; 
-                    nextSpan = '&#8250;'; 
+                  
                 });    
             nextNav.appendChild(nextSpan);
 
