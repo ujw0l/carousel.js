@@ -1,6 +1,6 @@
 <h1 align="center">Welcome to ctc-carousel-js 👋</h1>
 <p>
-  <img src="https://img.shields.io/badge/version-1.2.0-blue.svg?cacheSeconds=2592000" />
+  <img src="https://img.shields.io/badge/version-1.2.1-blue.svg?cacheSeconds=2592000" />
   <a href="https://ujw0l.github.io/carousel/">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" target="_blank" />
   </a>
@@ -74,6 +74,11 @@ Please ⭐️ this repository if you like it.
 <li>
 <a href="https://www.patreon.com/ujw0l">
   <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
+</a>
+</li>
+<li>
+<a  title="Support project on tidelift" href="https://tidelift.com/subscription/pkg/npm-ctc-carousel-js?utm_source=npm-ctc-carousel-js&utm_medium=referral&utm_campaign=readme">
+  <img src="https://cdn2.hubspot.net/hubfs/4008838/website/logos/Tidelift-shorthand.svg" width="75" height="75" />
 </a>
 </li>
 </ul>
