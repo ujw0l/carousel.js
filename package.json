@@ -1,6 +1,6 @@
 {
   "name": "ctc-carousel-js",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Javascript library to create image carousel",
   "main": "carousel.js",
   "scripts": {
@@ -11,7 +11,9 @@
     "url": "git+https://github.com/ujw0l/carousel.js.git"
   },
   "keywords": [
-    "image-carousel"
+    "image carousel",
+    "reponsive image carousel",
+    "multiple carousels"
   ],
   "author": "ujw0l",
   "license": "MIT",
