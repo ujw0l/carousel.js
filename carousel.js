@@ -10,18 +10,19 @@
  * 
  * 
  */
-
-class ctcCarousel {
+'use strict'
+ class ctcCarousel {
 
 
     constructor(elSelector, autoPlaySet, otherSettings) {
         let selectedEl = document.querySelectorAll(elSelector);
         selectedEl.forEach((el, i) => {
-            el.style.visibility = 'hidden';
+           
                 if (undefined != autoPlaySet && true === autoPlaySet.autoPlay ){
+
                     this.createCarouselDiv(el, i, 
                         {
-                            interval : undefined != autoPlaySet.autoPlayInverval ? autoPlaySet.autoPlayInverval : 2000,
+                            interval : undefined != autoPlaySet.autoPlayInterval ? autoPlaySet.autoPlayInterval: 2000,
                             auto : undefined != autoPlaySet.autoPlaySelector ? Array.from(document.querySelectorAll(autoPlaySet.autoPlaySelector)).includes(el) : true,
                         }
                         , otherSettings);
@@ -52,7 +53,7 @@ class ctcCarousel {
      
         let carouselDiv = document.createElement('div');
             carouselDiv.id = "ctc-carousel-" + carouselNum;
-            carouselDiv.classList = 'ctcCarouselDiv';
+            carouselDiv.classList.add('ctcCarouselDiv')
             carouselDiv.style = `width:${elWidth}px;height:${elHeight}px;margin-left:auto;margin-right:auto;display:block`;
 
         let imgDiv = document.createElement('div');
@@ -65,10 +66,12 @@ class ctcCarousel {
         el.appendChild(carouselDiv);
         this.loadImage(0,imgDiv,carouselImgs,carouselNum);
 
-        if(0 !== autoPlay.length && true === autoPlay.auto){
+        if(0 !== autoPlay && true === autoPlay.auto){
             setInterval(() => imgDiv.querySelector('#next-img-'+carouselNum).click(), autoPlay.interval);
         } 
-         el.style.visibility = '';   
+        if(undefined != otherSettings && 'function' == typeof(otherSettings.callBack)){
+            otherSettings.callBack(el);
+        } 
     }
 
     /*
@@ -89,7 +92,7 @@ class ctcCarousel {
 
          let loadingSpan = document.createElement('span');
             loadingSpan.id = `img-loading-${carouselNum}`;
-            loadingSpan.style = `font-size:${0.015*imgDiv.offsetWidth}px;width:${0.05*imgDiv.offsetWidth}px;height:${0.07*imgDiv.offsetHeight}px;margin-top:${imgDiv.offsetHeight/2}px;text-align:center;display:inline-block;`; 
+            loadingSpan.style = `font-size:${0.015*imgDiv.offsetWidth}px;width:${0.07*imgDiv.offsetWidth}px;height:${0.07*imgDiv.offsetHeight}px;margin-top:${imgDiv.offsetHeight/2}px;text-align:center;display:inline-block;`; 
             loadingSpan.innerHTML =  `Loading<b>.</b>`;
             
          let loadingInt = setInterval( ()=>{
@@ -143,7 +146,7 @@ class ctcCarousel {
         let prevImg =  0 === imgNum ? gal.length-1 : imgNum-1;
         let nextImg  =  gal.length-1 === imgNum ? 0 : imgNum+1;
         let navButtonWidth = 0.03 * elWidth  ;
-        let navButtonHeight =  0.07*elWidth;
+        let navButtonHeight =  0.2*elHeight;
 
         let prevNav = document.createElement('div');
             prevNav.id = `carousel-${carouselNum}-prev`;
@@ -161,7 +164,7 @@ class ctcCarousel {
 
             let prevLoadImg = new Image();
                 prevLoadImg.src = gal[prevImg].src;
-                prevLoadImg.addEventListener('load',()=> {
+                prevLoadImg.addEventListener('load',(event)=> {
                                                                 prevSpan.style.backgroundImage = `url('${event.target.src}')`;
                                                                 clearInterval(prevLoadInt);
                                                                 prevSpan.innerHTML = '&#8249;';
@@ -188,7 +191,7 @@ class ctcCarousel {
 
         let nextLoadImg = new Image();
                     nextLoadImg.src = gal[nextImg].src;
-        nextLoadImg.addEventListener('load',()=>{
+        nextLoadImg.addEventListener('load',(event)=>{
                     nextSpan.style.backgroundImage = `url('${event.target.src}')` ;
                     clearInterval(nextLoadInt);
                     nextSpan.innerHTML = '&#8250;'; 
@@ -230,7 +233,7 @@ class ctcCarousel {
             let prevSpan = prevNav.querySelector(`#prev-img-${i}`);
             let nextSpan = nextNav.querySelector(`#next-img-${i}`);
             let navButtonWidth = 0.03 * elWidth;
-            let navButtonHeight =  0.07*elWidth;
+            let navButtonHeight =  0.2*elHeight;
 
             imgDiv.style.width = carouselDiv.style.width = `${elWidth}px`;
             imgDiv.style.height = carouselDiv.style.height = `${elHeight}px`;
